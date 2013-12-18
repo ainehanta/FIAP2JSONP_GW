@@ -1,9 +1,9 @@
-/*
- * FIAP2JSONP_GW
- * https://github.com/miettal/FIAP2JSONP_GW
- *
- * Copyright 2012, "miettal" Hiromasa Ihara
- * Licensed under the MIT license.
+/*$
+ * FIAP2JSONP_GW$
+ * https://github.com/miettal/FIAP2JSONP_GW$
+ *$
+ * Copyright 2012, "miettal" Hiromasa Ihara$
+ * Licensed under the MIT license.$
  */
 var FiapClient = function(fiap2jsonp_url, fiap_url){
   return {
@@ -87,6 +87,34 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
         callback
       );
     },
+    fetch_by_just_time : function(point_id, eq, callback){
+      var eqs;
+      if(eq instanceof Array){
+        eqs = _.map(eq, function(t){ return t.format()});
+      }else{
+        eqs = [eq.format()];
+      }
+      var point_ids;
+      if(point_id instanceof Array){
+        point_ids = point_id;
+      }else{
+        point_ids = [point_id];
+      }
+      var keys = [];
+      _.each(eqs, function(eq){
+        _.each(point_ids, function(point_id_){
+          keys.push({
+            'id' : point_id_,
+            'attrName' : 'time',
+            'eq' : eq,
+          });
+        });
+      });
+      this.fetch(
+        keys,
+        callback
+      );
+    },
     fetch : function(key, callback){
       $.getJSON(
         this.fiap2jsonp_url+'?callback=?',
@@ -99,4 +127,3 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
     },
   };
 };
-
