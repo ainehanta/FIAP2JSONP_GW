@@ -16,7 +16,7 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
       }else{
         point_ids = [point_id];
       }
-      this.fetch(
+      return this.fetch(
         $.map(point_ids, function(point_id_){
           return {
             'id' : point_id_,
@@ -35,7 +35,7 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
       }else{
         point_ids = [point_id];
       }
-      this.fetch(
+      return this.fetch(
         $.map(point_ids, function(point_id_){
           return {
             'id' : point_id_,
@@ -55,7 +55,7 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
       }else{
         point_ids = [point_id];
       }
-      this.fetch(
+      return this.fetch(
         $.map(point_ids, function(point_id_){
           return {
             'id' : point_id_,
@@ -75,7 +75,7 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
       }else{
         point_ids = [point_id];
       }
-      this.fetch(
+      return this.fetch(
         $.map(point_ids, function(point_id_){
           return {
             'id' : point_id_,
@@ -110,20 +110,20 @@ var FiapClient = function(fiap2jsonp_url, fiap_url){
           });
         });
       });
-      this.fetch(
+      return this.fetch(
         keys,
         callback
       );
     },
     fetch : function(key, callback){
-      $.getJSON(
+      return $.getJSON(
         this.fiap2jsonp_url+'?callback=?',
         {
           fiap_url: this.fiap_url,
           key: key,
         },
         callback
-      )
+      );
     },
   };
 };
