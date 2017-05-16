@@ -5,4 +5,6 @@ WORKDIR /usr/src/app
 
 RUN apk add --update --no-cache $(apk search -U -q 'php7*') ca-certificates
 
+ADD ./fiap2json.php .
+
 CMD php7 -S 0.0.0.0:8000
