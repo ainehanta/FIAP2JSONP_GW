@@ -18,6 +18,7 @@ function uuid(){
 function send_response($json_array, $response_code = 200) {
   ob_start("ob_gzhandler");
   http_response_code($response_code);
+  // header("Access-Control-Allow-Headers: Content-Type");
   header("Content-Type: application/json; charset=utf-8");
   header("Access-Control-Allow-Origin: *");
   echo json_encode($json_array);
@@ -32,14 +33,28 @@ function sanitize_to_array($object) {
   }
 }
 
-if(!isset($_GET["fiap_url"]) ||
-   !isset($_GET["key"])){
-  echo json_encode(array("status" => "error", "error_msg" => "fiap_url and key are required."), 400);
+if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+  ob_start("ob_gzhandler");
+  http_response_code(200);
+  header("Access-Control-Allow-Headers: Access-Control-Allow-Origin, Access-Control-Allow-Methods, Content-Type");
+  header("Access-Control-Allow-Origin: *");
+  header("Access-Control-Allow-Methods: POST, HEAD, OPTIONS");
+  ob_end_flush();
+}
+
+$request_body = json_decode(file_get_contents('php://input'), true);
+if($request_body == null) {
+  echo json_encode(array("status" => "error", "error_msg" => "invalid query json"), 400);
   exit();
 }
 
-$fiap_url = $_GET["fiap_url"];
-$key = $_GET["key"];
+if(!isset($request_body["fiap_url"])){
+  echo json_encode(array("status" => "error", "error_msg" => "fiap_url is required."), 400);
+  exit();
+}
+
+$fiap_url = $request_body["fiap_url"];
+$key = $request_body["keys"];
 
 try {
   $fiap = new SoapClient($fiap_url."?wsdl",
